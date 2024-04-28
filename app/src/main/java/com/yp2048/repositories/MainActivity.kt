@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
@@ -112,12 +113,31 @@ fun MainScreen(controller: LifecycleCameraController) {
 
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+//        contentAlignment = Alignment.Center
     ) {
+
         CameraPreview(
             controller = controller,
             modifier = Modifier.fillMaxSize()
         )
+
+        Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.End) {
+            IconButton(onClick = {
+                controller.cameraSelector =
+                    if (controller.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                        CameraSelector.DEFAULT_FRONT_CAMERA
+                    } else {
+                        CameraSelector.DEFAULT_BACK_CAMERA
+                    }
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.flip_camera),
+                    contentDescription = "Take Picture",
+                    tint = Color.White,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+        }
 
         Row(
             modifier = Modifier
@@ -134,21 +154,6 @@ fun MainScreen(controller: LifecycleCameraController) {
                     tint = Color.White
                 )
             }*/
-            IconButton(onClick = {
-                controller.cameraSelector =
-                    if (controller.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
-                        CameraSelector.DEFAULT_FRONT_CAMERA
-                    } else {
-                        CameraSelector.DEFAULT_BACK_CAMERA
-                    }
-            }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.flip_camera),
-                    contentDescription = "Take Picture",
-                    tint = Color.White
-                )
-            }
-
             Button(onClick = {
                 isScanFaceSuccess = true
             }, modifier = Modifier.widthIn(200.dp)) {
