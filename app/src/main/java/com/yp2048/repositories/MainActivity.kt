@@ -154,11 +154,15 @@ fun MainScreen(controller: LifecycleCameraController) {
                     tint = Color.White
                 )
             }*/
-            Button(onClick = {
-                isScanFaceSuccess = true
-            }, modifier = Modifier.widthIn(200.dp)) {
-                Text(text = "请刷脸")
+
+            if (!isScanFaceSuccess) {
+                Button(onClick = {
+                    isScanFaceSuccess = true
+                }, modifier = Modifier.widthIn(200.dp)) {
+                    Text(text = "请刷脸")
+                }
             }
+
             /*
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(
