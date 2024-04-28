@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -172,29 +174,48 @@ fun MainScreen(controller: LifecycleCameraController) {
 
 @Composable
 fun ScanFaceSuccess(toggleMenu: () -> Unit) {
+
+    val buttonColors = ButtonDefaults.buttonColors(
+        containerColor = MaterialTheme.colorScheme.secondary
+    )
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Column(modifier = Modifier.fillMaxWidth(),
+        Column(
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(32.dp)) {
+            verticalArrangement = Arrangement.spacedBy(32.dp)
+        ) {
 
-            Button(onClick = { /*TODO*/ }, modifier = Modifier.width(200.dp)) {
+            Button(
+                onClick = { /*TODO*/ },
+                colors = buttonColors,
+                modifier = Modifier.width(200.dp)
+            ) {
                 Text(text = "进入库房")
             }
 
-            Button(onClick = { /*TODO*/ }, modifier = Modifier.width(200.dp)) {
+            Button(
+                onClick = { /*TODO*/ },
+                colors = buttonColors,
+                modifier = Modifier.width(200.dp)
+            ) {
                 Text(text = "领取物品")
             }
 
-            Button(onClick = { /*TODO*/ }, modifier = Modifier.width(200.dp)) {
+            Button(
+                onClick = { /*TODO*/ },
+                colors = buttonColors,
+                modifier = Modifier.width(200.dp)
+            ) {
                 Text(text = "归还物品")
             }
 
             Button(onClick = {
                 toggleMenu()
-            }, modifier = Modifier.width(200.dp)) {
+            }, colors = buttonColors, modifier = Modifier.width(200.dp)) {
                 Text(text = "返回首页")
             }
         }
