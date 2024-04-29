@@ -1,36 +1,36 @@
 package com.yp2048.repositories
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,9 +39,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.yp2048.repositories.presentation.HandBackGuideScreen
+import com.yp2048.repositories.presentation.HandBackScreen
+import com.yp2048.repositories.presentation.MenuScreen
+import com.yp2048.repositories.presentation.PickUpScreen
 import com.yp2048.repositories.ui.theme.RepositoriesTheme
 
 class MainActivity : ComponentActivity() {
@@ -77,7 +83,25 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(navController, startDestination = "main") {
                         composable("main") {
-                            MainScreen(controller)
+                            MainScreen(
+                                controller = controller,
+                                navController = navController,
+                                context = applicationContext
+                            )
+                        }
+                        composable("Menu") {
+                            MenuScreen(
+                                navController = navController
+                            )
+                        }
+                        composable("pickUp") {
+                            PickUpScreen(navController = navController)
+                        }
+                        composable("handBack") {
+                            HandBackScreen(navController = navController)
+                        }
+                        composable("HandBackGuide") {
+                            HandBackGuideScreen(navController = navController)
                         }
                         // 在这里添加更多的 composable
                     }
@@ -105,10 +129,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(controller: LifecycleCameraController) {
-
-    var isScanFaceDetector by remember { mutableStateOf(false) }
-    var isScanFaceSuccess by remember { mutableStateOf(false) }
+fun MainScreen(
+    controller: LifecycleCameraController,
+    navController: NavController,
+    context: Context
+) {
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -120,7 +145,13 @@ fun MainScreen(controller: LifecycleCameraController) {
             modifier = Modifier.fillMaxSize()
         )
 
-        Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.End) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Start
+        ) {
+
             IconButton(onClick = {
                 controller.cameraSelector =
                     if (controller.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
@@ -132,8 +163,8 @@ fun MainScreen(controller: LifecycleCameraController) {
                 Icon(
                     painter = painterResource(id = R.drawable.flip_camera),
                     contentDescription = "Take Picture",
-                    tint = Color.White,
-                    modifier = Modifier.size(32.dp)
+                    tint = Color.Gray,
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
@@ -145,88 +176,32 @@ fun MainScreen(controller: LifecycleCameraController) {
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            /*
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.videocam),
-                    contentDescription = "Take Picture",
-                    tint = Color.White
-                )
-            }*/
-
-            if (!isScanFaceSuccess) {
-                Button(onClick = {
-                    isScanFaceSuccess = true
-                }, modifier = Modifier.widthIn(200.dp)) {
-                    Text(text = "请刷脸")
-                }
-            }
-
-            /*
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.photo_camera),
-                    contentDescription = "Take Picture",
-                    tint = Color.White
-                )
-            }*/
-        }
-
-        if (isScanFaceSuccess) {
-            ScanFaceSuccess(toggleMenu = {
-                isScanFaceSuccess = false
-            })
-        }
-    }
-}
-
-@Composable
-fun ScanFaceSuccess(toggleMenu: () -> Unit) {
-
-    val buttonColors = ButtonDefaults.buttonColors(
-        containerColor = MaterialTheme.colorScheme.secondary,
-        contentColor = MaterialTheme.colorScheme.onSecondary
-    )
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(32.dp)
-        ) {
-
-            Button(
-                onClick = { /*TODO*/ },
-                colors = buttonColors,
-                modifier = Modifier.width(200.dp)
-            ) {
-                Text(text = "进入库房")
-            }
-
-            Button(
-                onClick = { /*TODO*/ },
-                colors = buttonColors,
-                modifier = Modifier.width(200.dp)
-            ) {
-                Text(text = "领取物品")
-            }
-
-            Button(
-                onClick = { /*TODO*/ },
-                colors = buttonColors,
-                modifier = Modifier.width(200.dp)
-            ) {
-                Text(text = "归还物品")
-            }
 
             Button(onClick = {
-                toggleMenu()
-            }, colors = buttonColors, modifier = Modifier.width(200.dp)) {
-                Text(text = "返回首页")
+
+                // 模拟刷脸成功
+                controller.takePicture(
+                    ContextCompat.getMainExecutor(context),
+                    object : ImageCapture.OnImageCapturedCallback() {
+                        override fun onCaptureSuccess(image: ImageProxy) {
+                            super.onCaptureSuccess(image)
+
+                            navController.navigate("Menu")
+                            Log.e("Camera", image.toBitmap().toString())
+                        }
+
+                        override fun onError(exception: ImageCaptureException) {
+                            super.onError(exception)
+
+                            Log.e("Camera", "Couldn't take photo: ", exception)
+                        }
+                    }
+                )
+
+            }, modifier = Modifier.widthIn(200.dp)) {
+                Text(text = "请刷脸")
             }
+
         }
     }
 }
@@ -239,10 +214,19 @@ fun CameraPreview(
     // 在这里添加相机预览的 composable
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    AndroidView(factory = {
-        PreviewView(it).apply {
-            this.controller = controller
-            controller.bindToLifecycle(lifecycleOwner)
+    Box(modifier = modifier.fillMaxSize()) {
+        AndroidView(factory = {
+            PreviewView(it).apply {
+                controller.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+                this.controller = controller
+                controller.bindToLifecycle(lifecycleOwner)
+            }
+        }, modifier = modifier)
+    }
+
+    DisposableEffect(controller) {
+        onDispose {
+            controller.unbind()
         }
-    }, modifier = modifier)
+    }
 }
