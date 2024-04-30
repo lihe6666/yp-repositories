@@ -10,10 +10,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.yp2048.repositories.R
 
 @Composable
 fun HandBackScreen(
@@ -26,23 +28,25 @@ fun HandBackScreen(
 
         }
 
-        Row(modifier = modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
             Button(onClick = {
 //                navController.navigateUp()
             }) {
-                Text(text = "进入库房")
+                Text(text = stringResource(id = R.string.into_storage_room))
             }
 
             Button(onClick = {
                 navController.navigate("HandBackGuide")
             }) {
-                Text(text = "归还物品")
+                Text(text = stringResource(id = R.string.hand_back_item))
             }
 
             Button(onClick = {
                 navController.navigate("Main")
             }) {
-                Text(text = "返回首页")
+                Text(text = stringResource(id = R.string.go_to_homepage))
             }
         }
     }

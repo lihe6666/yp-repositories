@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">无人值守仓</string>
+
+    <string name="scan_face">请刷脸</string>
+
+    <string name="go_back_login">返回登录</string>
+    <string name="quit">退出</string>
+
+    <string name="into_storage_room">进入库房</string>
+    <string name="pick_up_item">领取物品</string>
+    <string name="hand_back_item">归还物品</string>
+    <string name="go_to_homepage">返回首页</string>
+
+    <string name="apply">确认</string>
+    <string name="cancel">取消</string>
+
+    <string name="open_the_door">"门已开，欢迎进入库房！"</string>
 </resources>

@@ -19,9 +19,9 @@ import androidx.navigation.compose.rememberNavController
 import com.yp2048.repositories.R
 
 @Composable
-fun PickUpScreen(
-    navController: NavController,
-    modifier: Modifier = Modifier
+fun PickUpGuideScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -35,15 +35,15 @@ fun PickUpScreen(
             Button(onClick = {
                 navController.navigateUp()
             }, modifier = modifier.width(125.dp)) {
-                Text(text = stringResource(id = R.string.go_back_login))
+                Text(text = stringResource(id = R.string.apply))
             }
-            
+
             Button(onClick = {
                 navController.navigate("Main") {
                     popUpTo(0)
                 }
             }, modifier = modifier.width(125.dp)) {
-                Text(text = stringResource(id = R.string.quit))
+                Text(text = stringResource(id = R.string.cancel))
             }
         }
     }
@@ -51,6 +51,6 @@ fun PickUpScreen(
 
 @Preview
 @Composable
-fun PickUpScreenPreview() {
-    PickUpScreen(navController = rememberNavController())
+fun PickUpGuideScreenPreview() {
+    PickUpGuideScreen(navController = rememberNavController())
 }
