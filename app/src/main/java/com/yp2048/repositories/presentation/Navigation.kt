@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.yp2048.repositories.presentation.main.MainScreen
+import com.yp2048.repositories.presentation.main.MainViewModel
 
 // 定义屏幕
 enum class Screen(val route: String) {
@@ -23,6 +25,7 @@ fun Navigation() {
         composable(Screen.Home.route) {
             MainScreen(
                 navController = navController,
+                mainViewModel = MainViewModel()
             )
         }
         composable(Screen.Menu.route) {

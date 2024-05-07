@@ -1,7 +1,8 @@
-package com.yp2048.repositories.presentation
+package com.yp2048.repositories.presentation.main
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -46,14 +47,21 @@ import androidx.navigation.NavController
 import com.yp2048.repositories.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 @Composable
 fun MainScreen(
     navController: NavController,
+    mainViewModel: MainViewModel
 ) {
     var isScanFace by remember {
         mutableStateOf(false)
     }
+
+//    viewModel
 
     val context: Context = LocalContext.current as Activity
     val controller = remember {
@@ -128,7 +136,32 @@ fun MainScreen(
                                 override fun onCaptureSuccess(image: ImageProxy) {
                                     super.onCaptureSuccess(image)
 
-                                    Log.e("Camera", image.toBitmap().toString())
+                                    val bitmap = image.toBitmap()
+
+                                    val outputStream = ByteArrayOutputStream()
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                                    val byteArray = outputStream.toByteArray()
+
+                                    val file = File(context.filesDir, "face.jpg")
+                                    file.outputStream().use {
+                                        it.write(byteArray)
+                                    }
+
+                                    val filePart = MultipartBody.Part.createFormData(
+                                        "file",
+                                        "face.jpg",
+                                        RequestBody.create(
+                                            okhttp3.MediaType.parse("image/*"),
+                                            file
+                                        )
+                                    )
+
+                                    mainViewModel.requestScanFace(filePart)
+
+                                    val rotation = image.imageInfo.rotationDegrees
+                                    Log.e("MainViewModel", "rotation: $rotation")
+
+                                    image.close()
                                     navController.navigate("Menu")
                                 }
 
