@@ -80,6 +80,8 @@ fun MenuScreen(
             }
 
             Button(onClick = {
+                TokenHolder.setMyString(null)
+                
                 navController.navigateUp()
             }, modifier = Modifier.width(200.dp)) {
                 Text(text = stringResource(id = R.string.go_to_homepage))

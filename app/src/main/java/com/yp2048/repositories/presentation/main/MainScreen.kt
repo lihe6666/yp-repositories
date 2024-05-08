@@ -3,7 +3,9 @@ package com.yp2048.repositories.presentation.main
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.util.Log
+import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -21,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -57,27 +61,41 @@ fun MainScreen(
     navController: NavController,
     mainViewModel: MainViewModel
 ) {
-    var isScanFace by remember {
-        mutableStateOf(false)
+    val coroutineScope = rememberCoroutineScope()
+    val context: Context = LocalContext.current as Activity
+
+    val isLoading by mainViewModel.isLoading.observeAsState()
+
+    mainViewModel.mainUiState.observe(LocalLifecycleOwner.current) {
+        if (it.isScanFace) {
+            coroutineScope.launch {
+                delay(1000)
+                navController.navigate("Menu")
+            }
+        }
+
+        if (it.userMessage.isNotEmpty()) {
+            // Show toast
+            Toast.makeText(
+                context,
+                it.userMessage,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
-//    viewModel
+    val isButtonEnabled by mainViewModel.isButtonEnabled.observeAsState(initial = false)
+    LaunchedEffect(isButtonEnabled) {
+        if (!isButtonEnabled) {
+            mainViewModel.enableButtonAfterDelay()
+        }
+    }
 
-    val context: Context = LocalContext.current as Activity
     val controller = remember {
         LifecycleCameraController(context).apply {
             setEnabledUseCases(
                 CameraController.IMAGE_CAPTURE
             )
-        }
-    }
-
-    val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(key1 = isScanFace) {
-        coroutineScope.launch {
-            delay(3000)
-            isScanFace = true
         }
     }
 
@@ -138,8 +156,20 @@ fun MainScreen(
 
                                     val bitmap = image.toBitmap()
 
+                                    val degree = image.imageInfo.rotationDegrees
+                                    val matrix = Matrix()
+                                    matrix.postRotate(degree.toFloat())
+
+                                    val rotatedBitmap = Bitmap.createBitmap(
+                                        bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true
+                                    )
+
                                     val outputStream = ByteArrayOutputStream()
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                                    rotatedBitmap.compress(
+                                        Bitmap.CompressFormat.JPEG,
+                                        100,
+                                        outputStream
+                                    )
                                     val byteArray = outputStream.toByteArray()
 
                                     val file = File(context.filesDir, "face.jpg")
@@ -155,14 +185,8 @@ fun MainScreen(
                                             file
                                         )
                                     )
-
-                                    mainViewModel.requestScanFace(filePart)
-
-                                    val rotation = image.imageInfo.rotationDegrees
-                                    Log.e("MainViewModel", "rotation: $rotation")
-
                                     image.close()
-                                    navController.navigate("Menu")
+                                    mainViewModel.requestScanFace(filePart)
                                 }
 
                                 override fun onError(exception: ImageCaptureException) {
@@ -175,11 +199,21 @@ fun MainScreen(
                     }
 
                 },
-                enabled = isScanFace,
-                modifier = Modifier.widthIn(200.dp)) {
+                enabled = isButtonEnabled,
+                modifier = Modifier.widthIn(200.dp)
+            ) {
                 Text(text = stringResource(id = R.string.scan_face))
             }
+        }
 
+        if (isLoading == true) {
+            // Loading
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
     }
 }

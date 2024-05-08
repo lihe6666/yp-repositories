@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     // LiveData
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    // runtime-livedata
+    implementation(libs.androidx.runtime.livedata)
 
     ksp(libs.androidx.lifecycle.compiler)
 
