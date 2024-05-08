@@ -12,11 +12,19 @@ object RetrofitInstance {
         .add(KotlinJsonAdapterFactory())
         .build()
 
-    val api: ScanFaceService by lazy {
+    val apiService: ScanFaceService by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
         retrofit.create(ScanFaceService::class.java)
+    }
+
+    val toolsService: ToolsService by lazy {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+        retrofit.create(ToolsService::class.java)
     }
 }

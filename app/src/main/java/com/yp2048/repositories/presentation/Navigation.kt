@@ -4,8 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.yp2048.repositories.presentation.handback.HandBackGuideScreen
+import com.yp2048.repositories.presentation.handback.HandBackScreen
 import com.yp2048.repositories.presentation.main.MainScreen
 import com.yp2048.repositories.presentation.main.MainViewModel
+import com.yp2048.repositories.presentation.pickup.PickUpGuideScreen
+import com.yp2048.repositories.presentation.pickup.PickUpScreen
+import com.yp2048.repositories.presentation.pickup.PickUpViewModel
 
 // 定义屏幕
 enum class Screen(val route: String) {
@@ -34,7 +39,10 @@ fun Navigation() {
             )
         }
         composable(Screen.PickUp.route) {
-            PickUpScreen(navController = navController)
+            PickUpScreen(
+                navController = navController,
+                viewModel = PickUpViewModel()
+            )
         }
         composable(Screen.PickUpGuide.route) {
             PickUpGuideScreen(navController = navController)

@@ -13,7 +13,7 @@ import okhttp3.MultipartBody
 
 class MainViewModel: ViewModel() {
 
-    private val  apiService: ScanFaceService = RetrofitInstance.api
+    private val  apiService: ScanFaceService = RetrofitInstance.apiService
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
@@ -40,6 +40,7 @@ class MainViewModel: ViewModel() {
         // Loading
         _isLoading.value = true
         _isButtonEnabled.value = false
+        /*
         viewModelScope.launch {
             // api call
             val response = apiService.setFaceLogin(file)
@@ -55,7 +56,10 @@ class MainViewModel: ViewModel() {
             delay(1000)
             _isLoading.value = false
             _isButtonEnabled.value = true
-        }
+        }*/
+        _mainUiState.value?.isScanFace = true
+        _isLoading.value = false
+        _isButtonEnabled.value = true
     }
 }
 

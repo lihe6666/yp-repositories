@@ -1,4 +1,4 @@
-package com.yp2048.repositories.presentation
+package com.yp2048.repositories.presentation.handback
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.yp2048.repositories.R
 
 @Composable
-fun PickUpScreen(
+fun HandBackGuideScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -31,19 +30,12 @@ fun PickUpScreen(
 
         Row(modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            .padding(16.dp), horizontalArrangement = Arrangement.End) {
+
             Button(onClick = {
-                navController.navigateUp()
-            }, modifier = modifier.width(125.dp)) {
-                Text(text = stringResource(id = R.string.go_back_login))
-            }
-            
-            Button(onClick = {
-                navController.navigate("Main") {
-                    popUpTo(0)
-                }
-            }, modifier = modifier.width(125.dp)) {
-                Text(text = stringResource(id = R.string.quit))
+                navController.navigate("Main")
+            }) {
+                Text(text = stringResource(id = R.string.go_to_homepage))
             }
         }
     }
@@ -51,6 +43,6 @@ fun PickUpScreen(
 
 @Preview
 @Composable
-fun PickUpScreenPreview() {
-    PickUpScreen(navController = rememberNavController())
+fun HandBackGuideScreenPreview() {
+    HandBackGuideScreen(navController = rememberNavController())
 }

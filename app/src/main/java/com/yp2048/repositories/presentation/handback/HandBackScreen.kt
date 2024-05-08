@@ -1,4 +1,4 @@
-package com.yp2048.repositories.presentation
+package com.yp2048.repositories.presentation.handback
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.yp2048.repositories.R
 
 @Composable
-fun HandBackGuideScreen(
+fun HandBackScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -30,7 +30,18 @@ fun HandBackGuideScreen(
 
         Row(modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp), horizontalArrangement = Arrangement.End) {
+            .padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            Button(onClick = {
+//                navController.navigateUp()
+            }) {
+                Text(text = stringResource(id = R.string.into_storage_room))
+            }
+
+            Button(onClick = {
+                navController.navigate("HandBackGuide")
+            }) {
+                Text(text = stringResource(id = R.string.hand_back_item))
+            }
 
             Button(onClick = {
                 navController.navigate("Main")
@@ -43,6 +54,6 @@ fun HandBackGuideScreen(
 
 @Preview
 @Composable
-fun HandBackGuideScreenPreview() {
-    HandBackGuideScreen(navController = rememberNavController())
+fun HandBackScreenPreview() {
+    HandBackScreen(navController = rememberNavController())
 }

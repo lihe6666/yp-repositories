@@ -1,4 +1,4 @@
-package com.yp2048.repositories.presentation
+package com.yp2048.repositories.presentation.pickup
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,9 +19,10 @@ import androidx.navigation.compose.rememberNavController
 import com.yp2048.repositories.R
 
 @Composable
-fun HandBackScreen(
+fun PickUpGuideScreen(
+    modifier: Modifier = Modifier,
     navController: NavController,
-    modifier: Modifier = Modifier
+    viewModel: PickUpGuideViewModel = PickUpGuideViewModel()
 ) {
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -32,21 +34,17 @@ fun HandBackScreen(
             .fillMaxWidth()
             .padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
             Button(onClick = {
-//                navController.navigateUp()
-            }) {
-                Text(text = stringResource(id = R.string.into_storage_room))
+                navController.navigateUp()
+            }, modifier = modifier.width(125.dp)) {
+                Text(text = stringResource(id = R.string.apply))
             }
 
             Button(onClick = {
-                navController.navigate("HandBackGuide")
-            }) {
-                Text(text = stringResource(id = R.string.hand_back_item))
-            }
-
-            Button(onClick = {
-                navController.navigate("Main")
-            }) {
-                Text(text = stringResource(id = R.string.go_to_homepage))
+                navController.navigate("Main") {
+                    popUpTo(0)
+                }
+            }, modifier = modifier.width(125.dp)) {
+                Text(text = stringResource(id = R.string.cancel))
             }
         }
     }
@@ -54,6 +52,6 @@ fun HandBackScreen(
 
 @Preview
 @Composable
-fun HandBackScreenPreview() {
-    HandBackScreen(navController = rememberNavController())
+fun PickUpGuideScreenPreview() {
+    PickUpGuideScreen(navController = rememberNavController())
 }
