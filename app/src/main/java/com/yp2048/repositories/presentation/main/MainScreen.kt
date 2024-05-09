@@ -30,11 +30,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -82,11 +83,8 @@ fun MainScreen(
         }
     }
 
-    val isButtonEnabled by mainViewModel.isButtonEnabled.observeAsState(initial = false)
-    LaunchedEffect(isButtonEnabled) {
-        if (!isButtonEnabled) {
-            mainViewModel.enableButtonAfterDelay()
-        }
+    var isButtonState by remember {
+        mutableStateOf(true)
     }
 
     val controller = remember {
@@ -146,6 +144,8 @@ fun MainScreen(
                 onClick = {
                     // 模拟刷脸成功
                     coroutineScope.launch {
+                        isButtonState = false
+
                         controller.takePicture(
                             ContextCompat.getMainExecutor(context),
                             object : ImageCapture.OnImageCapturedCallback() {
@@ -197,7 +197,7 @@ fun MainScreen(
                     }
 
                 },
-                enabled = isButtonEnabled,
+                enabled = isButtonState,
                 modifier = Modifier.widthIn(200.dp)
             ) {
                 Text(text = stringResource(id = R.string.scan_face))

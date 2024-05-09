@@ -8,15 +8,16 @@ import com.yp2048.repositories.presentation.handback.HandBackGuideScreen
 import com.yp2048.repositories.presentation.handback.HandBackScreen
 import com.yp2048.repositories.presentation.main.MainScreen
 import com.yp2048.repositories.presentation.main.MainViewModel
+import com.yp2048.repositories.presentation.pickup.PickUpBoardScreen
 import com.yp2048.repositories.presentation.pickup.PickUpGuideScreen
-import com.yp2048.repositories.presentation.pickup.PickUpScreen
-import com.yp2048.repositories.presentation.pickup.PickUpViewModel
+import com.yp2048.repositories.presentation.pickup.PickUpToolScreen
 
 // 定义屏幕
 enum class Screen(val route: String) {
     Home("Main"),
     Menu("Menu"),
-    PickUp("PickUp"),
+    PickUpBoard("PickUpBoard"),
+    PickUpTool("PickUpTool"),
     PickUpGuide("PickUpGuide"),
     HandBack("HandBack"),
     HandBackGuide("HandBackGuide")
@@ -26,7 +27,7 @@ enum class Screen(val route: String) {
 fun Navigation() {
     val navController = rememberNavController()
     // 导航主机
-    NavHost(navController = navController, startDestination = Screen.Home.route) {
+    NavHost(navController = navController, startDestination = Screen.HandBack.route) {
         composable(Screen.Home.route) {
             MainScreen(
                 navController = navController,
@@ -38,10 +39,14 @@ fun Navigation() {
                 navController = navController
             )
         }
-        composable(Screen.PickUp.route) {
-            PickUpScreen(
-                navController = navController,
-                viewModel = PickUpViewModel()
+        composable(Screen.PickUpBoard.route) {
+            PickUpBoardScreen(
+                navController = navController
+            )
+        }
+        composable(Screen.PickUpTool.route) {
+            PickUpToolScreen(
+                navController = navController
             )
         }
         composable(Screen.PickUpGuide.route) {

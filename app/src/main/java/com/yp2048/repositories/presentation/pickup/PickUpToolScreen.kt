@@ -8,47 +8,74 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.yp2048.repositories.R
-import com.yp2048.repositories.data.api.ToolResponse
+import com.yp2048.repositories.data.api.ToolData
 
 @Composable
-fun PickUpScreen(
+fun PickUpToolScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: PickUpViewModel
+    viewModel: PickUpToolViewModel = viewModel()
 ) {
 
-    val tools by viewModel.tools.observeAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchPositionTools("1")
+    LaunchedEffect(key1 = Unit) {
+        viewModel.updateTools("1")
     }
 
+    Table01(navController = navController, uiState = uiState)
+}
+
+@Composable
+fun Table01(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    uiState: PickUpUiState
+) {
     Column(modifier = modifier.fillMaxSize()) {
+        Row(modifier = modifier
+            .fillMaxWidth()
+            .background(Color.Gray), horizontalArrangement = Arrangement.SpaceBetween) {
+            Column {
+                Text(text = "名称")
+            }
+            Column {
+                Text(text = "剩余数量")
+            }
+            Column {
+                Text(text = "物品图片")
+            }
+            Column {
+                Text(text = "领取数量")
+            }
+        }
         Column(
             modifier = modifier
                 .weight(1f)
-                .background(Color.Red)
                 .verticalScroll(state = rememberScrollState(), enabled = true)
         ) {
             // 请在这里将Table 列表填充 为 viewModel.fetchPositionTools("1") 的数据
 
-            Table(tableData = tools ?: ToolResponse())
+            Table(tableData = uiState.tools)
         }
 
         Row(
@@ -58,18 +85,15 @@ fun PickUpScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(onClick = {
-//                navController.navigateUp()
-                viewModel.fetchPositionTools("1")
+                navController.navigate("PickUpGuide")
             }, modifier = modifier.width(125.dp)) {
-                Text(text = stringResource(id = R.string.go_back_login))
+                Text(text = stringResource(id = R.string.apply))
             }
 
             Button(onClick = {
-                navController.navigate("Main") {
-                    popUpTo(0)
-                }
+                navController.navigateUp()
             }, modifier = modifier.width(125.dp)) {
-                Text(text = stringResource(id = R.string.quit))
+                Text(text = stringResource(id = R.string.cancel))
             }
         }
     }
@@ -78,24 +102,35 @@ fun PickUpScreen(
 @Composable
 fun Table(
     modifier: Modifier = Modifier,
-    tableData: ToolResponse
+    tableData: List<ToolData>
 ) {
-
-    tableData.rows.forEach { rowData ->
+    tableData.forEach { rowData ->
         Row(
             modifier = modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.Start
         ) {
-            Text(text = rowData.fullName)
+            Column(modifier = modifier.widthIn(100.dp)) {
+                Text(text = rowData.fullName)
+            }
+            Column(modifier = modifier.width(100.dp)) {
+                Text(text = rowData.quantityInStock)
+            }
+            Column(modifier = modifier.width(100.dp)) {
+                Text(text = "无")
+            }
+            Column(modifier = modifier.width(100.dp)) {
+                Text(text = rowData.storageRack.toString())
+            }
         }
+        HorizontalDivider()
     }
 }
 
 @Preview
 @Composable
-fun PickUpScreenPreview() {
-    PickUpScreen(
+fun PickUpToolScreenPreview() {
+    PickUpToolScreen(
         navController = rememberNavController(),
-        viewModel = PickUpViewModel()
+        viewModel = PickUpToolViewModel()
     )
 }

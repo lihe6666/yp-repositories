@@ -63,7 +63,7 @@ fun MenuScreen(
 
             Button(
                 onClick = {
-                    navController.navigate("pickUp")
+                    navController.navigate("pickUpBoard")
                 },
                 modifier = Modifier.width(200.dp)
             ) {
@@ -80,7 +80,7 @@ fun MenuScreen(
             }
 
             Button(onClick = {
-                TokenHolder.setMyString(null)
+                TokenManager.setToken(null)
                 
                 navController.navigateUp()
             }, modifier = Modifier.width(200.dp)) {

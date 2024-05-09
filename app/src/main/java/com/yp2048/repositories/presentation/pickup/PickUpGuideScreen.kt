@@ -32,19 +32,14 @@ fun PickUpGuideScreen(
 
         Row(modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Button(onClick = {
-                navController.navigateUp()
-            }, modifier = modifier.width(125.dp)) {
-                Text(text = stringResource(id = R.string.apply))
-            }
+            .padding(16.dp), horizontalArrangement = Arrangement.End) {
 
             Button(onClick = {
                 navController.navigate("Main") {
                     popUpTo(0)
                 }
             }, modifier = modifier.width(125.dp)) {
-                Text(text = stringResource(id = R.string.cancel))
+                Text(text = stringResource(id = R.string.go_to_homepage))
             }
         }
     }
