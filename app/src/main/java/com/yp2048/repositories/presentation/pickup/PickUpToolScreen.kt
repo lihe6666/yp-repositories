@@ -34,18 +34,16 @@ import com.yp2048.repositories.presentation.components.PickUpTable
 fun PickUpToolScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: PickUpToolViewModel = viewModel()
+    viewModel: PickUpToolViewModel = viewModel(),
+    id: String? = null
 ) {
     val context = LocalContext.current
-
-    /*
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val id = navBackStackEntry?.arguments?.getInt("id")
-    */
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.updateTools("1")
+        if (id != null) {
+            viewModel.updateTools(id = id)
+        }
     }
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -120,7 +118,7 @@ fun PickUpToolScreen(
             }
         }
 
-        if (uiState.userMessage.isNotEmpty()) {
+        if (uiState.userMessage?.isNotEmpty() == true) {
             // Show message dialog
             Toast.makeText(context, uiState.userMessage, Toast.LENGTH_SHORT).show()
         }

@@ -34,7 +34,7 @@ fun PickUpBoardScreen(
         ) {
 
             Button(onClick = {
-                navController.navigate("PickUpTool")
+                navController.navigate("PickUpTool/1")
             }) {
                 Text(text = "选择一个柜子-1")
             }

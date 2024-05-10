@@ -62,7 +62,7 @@ class HandBackViewModel : ViewModel() {
 
 data class HandBackUiState(
     val data: List<HandBackData> = emptyList(),
-    val userMessage: String = "",
+    val userMessage: String? = "",
     val isLoading: Boolean = false,
     val packages: MutableMap<String, List<HandBackBody>> = mutableMapOf()
 )

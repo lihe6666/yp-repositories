@@ -1,9 +1,11 @@
 package com.yp2048.repositories.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.yp2048.repositories.presentation.handback.HandBackGuideScreen
 import com.yp2048.repositories.presentation.handback.HandBackScreen
 import com.yp2048.repositories.presentation.main.MainScreen
@@ -44,9 +46,16 @@ fun Navigation() {
                 navController = navController
             )
         }
-        composable(Screen.PickUpTool.route) {
+        composable(Screen.PickUpTool.route, arguments = listOf(
+            navArgument("id") {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            }
+        )) {
             PickUpToolScreen(
-                navController = navController
+                navController = navController,
+                id = it.arguments?.getString("id")
             )
         }
         composable(Screen.PickUpGuide.route) {

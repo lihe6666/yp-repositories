@@ -120,7 +120,7 @@ fun HandBackScreen(
         }
     }
 
-    if (uiState.userMessage.isNotEmpty()) {
+    if (uiState.userMessage?.isNotEmpty() == true) {
         // Show message dialog
         Toast.makeText(context, uiState.userMessage, Toast.LENGTH_SHORT).show()
     }
