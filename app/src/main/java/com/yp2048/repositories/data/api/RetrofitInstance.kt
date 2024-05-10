@@ -8,10 +8,12 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.net.ConnectException
 
 object RetrofitInstance {
 
     private const val BASE_URL = "http://192.168.2.60:8080/"
+
     private val moshi: Moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()

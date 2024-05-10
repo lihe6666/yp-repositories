@@ -1,6 +1,8 @@
 package com.yp2048.repositories.presentation.handback
 
+import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,8 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.yp2048.repositories.R
-import com.yp2048.repositories.data.api.HandBackData
+import com.yp2048.repositories.data.api.HandBackBody
 import com.yp2048.repositories.presentation.components.HandBackTable
 
 @Composable
@@ -36,7 +37,7 @@ fun HandBackScreen(
     navController: NavController,
     viewModel: HandBackViewModel = viewModel()
 ) {
-
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
@@ -47,52 +48,41 @@ fun HandBackScreen(
         Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Text(text = "领取记录")
         }
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(Color.LightGray), horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                modifier = modifier.weight(0.25F),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "名称")
-            }
-            Column(
-                modifier = modifier.weight(0.25F),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "领取数量")
-            }
-            Column(
-                modifier = modifier.weight(0.25F),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "物品图片")
-            }
-            Column(
-                modifier = modifier.weight(0.25F),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "归还数量")
-            }
-        }
 
-        Column(
-            modifier = modifier
-                .weight(1f)
-                .verticalScroll(state = rememberScrollState(), enabled = true)
-        ) {
-            // 请在这里将Table 列表填充 为 viewModel.fetchPositionTools("1") 的数据
+        var packages = mutableMapOf<String, List<HandBackBody>>()
 
-            val temp = mutableListOf<HandBackData>()
-            for (i in 1..100) {
-                if (uiState.data.isNotEmpty()) {
-                    temp.add(uiState.data[0])
+        Column(modifier = modifier.weight(1F)) {
+            HandBackTable(tableData = uiState.data, increment = { row, v ->
+
+                if (packages.containsKey(row.storageId)) {
+                    // 遍历工具
+                    packages[row.storageId]?.forEach {
+                        if (it.id == row.id) {
+                            it.deviceNumber = v
+                            return@forEach
+                        }
+                    }
+
+                    return@HandBackTable
                 }
-            }
 
-            HandBackTable(tableData = temp)
+                val body: MutableList<HandBackBody> = mutableListOf()
+                body.add(HandBackBody(id = row.storageId, deviceNumber = v, giveBackId = row.id))
+                packages = packages.toMutableMap().apply {
+                    put(row.storageId, body)
+                }
+            }, decrease = { row, v ->
+                if (packages.containsKey(row.storageId)) {
+                    // 遍历工具
+                    packages[row.storageId]?.forEach {
+                        if (it.id == row.id) {
+                            it.deviceNumber = v
+                            return@forEach
+                        }
+                    }
+                    return@HandBackTable
+                }
+            })
         }
 
         Row(
@@ -100,20 +90,16 @@ fun HandBackScreen(
                 .fillMaxWidth()
                 .padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(onClick = {
-//                navController.navigateUp()
-            }) {
-                Text(text = stringResource(id = R.string.into_storage_room))
-            }
 
             Button(onClick = {
-                navController.navigate("HandBackGuide")
+                viewModel.fetchHandBackPackages(packages)
+
             }) {
                 Text(text = stringResource(id = R.string.hand_back_item))
             }
 
             Button(onClick = {
-                navController.navigate("Main")
+                navController.navigate("Menu")
             }) {
                 Text(text = stringResource(id = R.string.go_to_homepage))
             }
@@ -123,11 +109,20 @@ fun HandBackScreen(
     if (uiState.isLoading) {
         // Show loading dialog
         Box(
-            modifier = modifier.fillMaxSize().background(Color.Gray.copy(alpha = 0.5f)),
+            modifier = modifier
+                .clickable {
+                }
+                .fillMaxSize()
+                .background(Color.Gray.copy(alpha = 0.5f)),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
         }
+    }
+
+    if (uiState.userMessage.isNotEmpty()) {
+        // Show message dialog
+        Toast.makeText(context, uiState.userMessage, Toast.LENGTH_SHORT).show()
     }
 }
 

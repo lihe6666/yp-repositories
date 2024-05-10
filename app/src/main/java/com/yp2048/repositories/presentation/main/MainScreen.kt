@@ -30,12 +30,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,7 +46,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.yp2048.repositories.R
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -63,29 +60,7 @@ fun MainScreen(
     val coroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current as Activity
 
-    val isLoading by mainViewModel.isLoading.observeAsState()
-
-    mainViewModel.mainUiState.observe(LocalLifecycleOwner.current) {
-        if (it.isScanFace) {
-            coroutineScope.launch {
-                delay(1000)
-                navController.navigate("Menu")
-            }
-        }
-
-        if (it.userMessage.isNotEmpty()) {
-            // Show toast
-            Toast.makeText(
-                context,
-                it.userMessage,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    var isButtonState by remember {
-        mutableStateOf(true)
-    }
+    val uiState by mainViewModel.uiState.collectAsState()
 
     val controller = remember {
         LifecycleCameraController(context).apply {
@@ -144,7 +119,7 @@ fun MainScreen(
                 onClick = {
                     // 模拟刷脸成功
                     coroutineScope.launch {
-                        isButtonState = false
+                        mainViewModel.updateButtonState(false)
 
                         controller.takePicture(
                             ContextCompat.getMainExecutor(context),
@@ -197,14 +172,14 @@ fun MainScreen(
                     }
 
                 },
-                enabled = isButtonState,
+                enabled = uiState.isButtonState,
                 modifier = Modifier.widthIn(200.dp)
             ) {
                 Text(text = stringResource(id = R.string.scan_face))
             }
         }
 
-        if (isLoading == true) {
+        if (uiState.isLoading) {
             // Loading
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -212,6 +187,19 @@ fun MainScreen(
             ) {
                 CircularProgressIndicator()
             }
+        }
+
+        if (uiState.isScanFace) {
+            navController.navigate("Menu")
+        }
+
+        if (uiState.userMessage.isNotEmpty()) {
+            // Show toast
+            Toast.makeText(
+                context,
+                uiState.userMessage,
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }
