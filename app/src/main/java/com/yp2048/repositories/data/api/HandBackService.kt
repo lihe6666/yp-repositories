@@ -26,11 +26,6 @@ data class HandBackData(
     val imageUrl: String? = null
 )
 
-@JsonClass(generateAdapter = true)
-data class Packages(
-    val item: Map<String, List<HandBackBody>>
-)
-
 
 @JsonClass(generateAdapter = true)
 data class HandBackBody(

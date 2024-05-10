@@ -32,9 +32,7 @@ fun PickUpBoardScreen(
                 .weight(1f)
                 .verticalScroll(state = rememberScrollState(), enabled = true)
         ) {
-            // 请在这里将Table 列表填充 为 viewModel.fetchPositionTools("1") 的数据
 
-//            Table(tableData = uiState.tools)
             Button(onClick = {
                 navController.navigate("PickUpTool")
             }) {

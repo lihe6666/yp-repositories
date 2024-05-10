@@ -27,7 +27,7 @@ enum class Screen(val route: String) {
 fun Navigation() {
     val navController = rememberNavController()
     // 导航主机
-    NavHost(navController = navController, startDestination = Screen.HandBack.route) {
+    NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
             MainScreen(
                 navController = navController,
