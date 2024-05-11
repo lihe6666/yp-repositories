@@ -68,16 +68,16 @@ fun PickUpToolScreen(
         ) {
 
             Button(
-                modifier = modifier.width(200.dp),
+                modifier = modifier.width(150.dp),
+                enabled = uiState.data.isNotEmpty(),
                 onClick = {
                     viewModel.updatePickUpPackages(packages)
-
                 }) {
                 Text(text = stringResource(id = R.string.apply))
             }
 
             Button(
-                modifier = modifier.width(200.dp),
+                modifier = modifier.width(150.dp),
                 onClick = {
                     navController.navigate("Menu")
                 }) {

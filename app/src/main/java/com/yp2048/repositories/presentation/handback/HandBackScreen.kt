@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -67,16 +68,20 @@ fun HandBackScreen(
                 .padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            Button(onClick = {
-                viewModel.fetchHandBackPackages(packages)
-
-            }) {
+            Button(
+                modifier = modifier.width(150.dp),
+                enabled = uiState.data.isNotEmpty(),
+                onClick = {
+                    viewModel.fetchHandBackPackages(packages)
+                }) {
                 Text(text = stringResource(id = R.string.hand_back_item))
             }
 
-            Button(onClick = {
-                navController.navigate("Menu")
-            }) {
+            Button(
+                modifier = modifier.width(150.dp),
+                onClick = {
+                    navController.navigate("Menu")
+                }) {
                 Text(text = stringResource(id = R.string.go_to_homepage))
             }
         }
