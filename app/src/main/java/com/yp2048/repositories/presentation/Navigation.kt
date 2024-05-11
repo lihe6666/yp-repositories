@@ -19,7 +19,7 @@ enum class Screen(val route: String) {
     Home("Main"),
     Menu("Menu"),
     PickUpBoard("PickUpBoard"),
-    PickUpTool("PickUpTool"),
+    PickUpTool("PickUpTool/{id}"),
     PickUpGuide("PickUpGuide"),
     HandBack("HandBack"),
     HandBackGuide("HandBackGuide")

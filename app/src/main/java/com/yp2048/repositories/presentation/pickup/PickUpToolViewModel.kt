@@ -11,14 +11,21 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class PickUpToolViewModel: ViewModel() {
 
-    private val toolsService = RetrofitInstance.toolsService
+    private val toolsService = RetrofitInstance.pickUpServer
 
     // StateFlow
     private val _uiState = MutableStateFlow(PickUpUiState())
     val uiState: StateFlow<PickUpUiState> = _uiState.asStateFlow()
+
+    fun resetUserMessage() {
+        _uiState.update {
+            it.copy(userMessage = "")
+        }
+    }
 
     fun updateTools(id: String) {
 
@@ -31,7 +38,7 @@ class PickUpToolViewModel: ViewModel() {
             if (response.code == 200) {
                 _uiState.update {
                     it.copy(
-                        tools = response.rows
+                        data = response.rows
                     )
                 }
             }
@@ -43,18 +50,27 @@ class PickUpToolViewModel: ViewModel() {
         }
     }
 
-    fun updatePickUpPackages(body: MutableMap<String, List<Device>>) {
+    fun updatePickUpPackages(body: MutableMap<String, MutableList<Device>>) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(isLoading = true)
             }
 
-            delay(3000)
-            val response = toolsService.setStoreReceiveGoodLog(body)
+            try {
+                val response = toolsService.setStoreReceiveGoodLog(body)
 
-            _uiState.update {
-                it.copy(userMessage = response.msg)
+                if (response.code == 200) {
+                    _uiState.update {
+                        it.copy(data = response.rows)
+                    }
+                }
+            } catch (e: IOException) {
+                _uiState.update {
+                    it.copy(userMessage = "网络错误，请稍后重试")
+                }
             }
+
+            delay(3000)
 
             _uiState.update {
                 it.copy(isLoading = false)
@@ -65,7 +81,7 @@ class PickUpToolViewModel: ViewModel() {
 
 
 data class PickUpUiState(
-    val tools: List<PickUpData> = listOf(PickUpData()),
+    val data: List<PickUpData> = listOf(PickUpData()),
     val selectedTools: List<Int> = emptyList(),
     val userMessage: String? = "",
     val isLoading: Boolean = false,

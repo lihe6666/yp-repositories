@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class HandBackViewModel : ViewModel() {
 
@@ -19,19 +20,32 @@ class HandBackViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(HandBackUiState())
     val uiState: StateFlow<HandBackUiState> = _uiState.asStateFlow()
 
+    fun resetUserMessage() {
+        _uiState.update {
+            it.copy(userMessage = "")
+        }
+    }
+
     fun fetchHandBackItems() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(isLoading = true)
             }
 
-            val response = handBackService.getStoreReceiveGoodLogApi()
+            try {
+                val response = handBackService.getStoreReceiveGoodLogApi()
 
-            if (response.code == 200) {
+                if (response.code == 200) {
+                    _uiState.update {
+                        it.copy(data = response.rows)
+                    }
+                }
+            } catch (e: IOException) {
                 _uiState.update {
-                    it.copy(data = response.rows)
+                    it.copy(userMessage = "网络错误，请稍后重试")
                 }
             }
+
             delay(3000)
 
             _uiState.update {
@@ -40,17 +54,23 @@ class HandBackViewModel : ViewModel() {
         }
     }
 
-    fun fetchHandBackPackages(body: MutableMap<String, List<HandBackBody>>) {
+    fun fetchHandBackPackages(body: MutableMap<String, MutableList<HandBackBody>>) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(isLoading = true)
             }
 
             delay(3000)
-            val response = handBackService.getStoreReceiveGoodLog(body)
+            try {
+                val response = handBackService.getStoreReceiveGoodLog(body)
 
-            _uiState.update {
-                it.copy(userMessage = response.msg)
+                _uiState.update {
+                    it.copy(userMessage = response.msg)
+                }
+            } catch (e: IOException) {
+                _uiState.update {
+                    it.copy(userMessage = "网络错误，请稍后重试")
+                }
             }
 
             _uiState.update {

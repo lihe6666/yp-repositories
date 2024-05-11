@@ -13,7 +13,7 @@ interface HandBackService {
 
     @Headers("Content-Type: application/json")
     @POST("/store/api/getStoreReceiveGoodLog")
-    suspend fun getStoreReceiveGoodLog(@Body body: MutableMap<String, List<HandBackBody>>): HandBackResponse
+    suspend fun getStoreReceiveGoodLog(@Body body: MutableMap<String, MutableList<HandBackBody>>): HandBackResponse
 }
 
 

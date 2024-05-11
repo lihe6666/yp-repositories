@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import java.io.IOException
 
 class MainViewModel: ViewModel() {
 
@@ -19,6 +20,12 @@ class MainViewModel: ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
+
+    fun resetUserMessage() {
+        _uiState.update {
+            it.copy(userMessage = "")
+        }
+    }
 
     fun updateButtonState(state: Boolean = false) {
         _uiState.update {
@@ -34,20 +41,25 @@ class MainViewModel: ViewModel() {
 
         viewModelScope.launch {
             // api call
-            val response = apiService.setFaceLogin(file)
-            delay(3000)
+            try {
+                val response = apiService.setFaceLogin(file)
 
-            if (response.code == 200) {
-                TokenManager.setToken(response.data?.token)
+                if (response.code == 200) {
+                    TokenManager.setToken(response.data?.token)
 
-                _uiState.update {
-                    it.copy(isScanFace = true)
+                    _uiState.update {
+                        it.copy(isScanFace = true)
+                    }
+
+                    return@launch
+                } else {
+                    _uiState.update {
+                        it.copy(userMessage = response.msg)
+                    }
                 }
-
-                return@launch
-            } else {
+            } catch (e: IOException) {
                 _uiState.update {
-                    it.copy(userMessage = response.msg)
+                    it.copy(userMessage = "网络错误，请稍后重试")
                 }
             }
 

@@ -200,6 +200,8 @@ fun MainScreen(
                 uiState.userMessage,
                 Toast.LENGTH_SHORT
             ).show()
+
+            mainViewModel.resetUserMessage()
         }
     }
 }

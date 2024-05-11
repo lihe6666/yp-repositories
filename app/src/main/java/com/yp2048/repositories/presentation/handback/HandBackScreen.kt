@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.yp2048.repositories.R
 import com.yp2048.repositories.data.api.HandBackBody
 import com.yp2048.repositories.presentation.components.HandBackTable
+import com.yp2048.repositories.presentation.components.updateHandBackPackage
 
 @Composable
 fun HandBackScreen(
@@ -49,39 +50,14 @@ fun HandBackScreen(
             Text(text = "领取记录")
         }
 
-        var packages = mutableMapOf<String, List<HandBackBody>>()
+        val handBackBody = mutableMapOf<String, HandBackBody>()
+        val packages = mutableMapOf<String, MutableList<HandBackBody>>()
 
         Column(modifier = modifier.weight(1F)) {
             HandBackTable(tableData = uiState.data, increment = { row, v ->
-
-                if (packages.containsKey(row.storageId)) {
-                    // 遍历工具
-                    packages[row.storageId]?.forEach {
-                        if (it.id == row.id) {
-                            it.deviceNumber = v
-                            return@forEach
-                        }
-                    }
-
-                    return@HandBackTable
-                }
-
-                val body: MutableList<HandBackBody> = mutableListOf()
-                body.add(HandBackBody(id = row.storageId, deviceNumber = v, giveBackId = row.id))
-                packages = packages.toMutableMap().apply {
-                    put(row.storageId, body)
-                }
+                updateHandBackPackage(packages, handBackBody, row, v.toString())
             }, decrease = { row, v ->
-                if (packages.containsKey(row.storageId)) {
-                    // 遍历工具
-                    packages[row.storageId]?.forEach {
-                        if (it.id == row.id) {
-                            it.deviceNumber = v
-                            return@forEach
-                        }
-                    }
-                    return@HandBackTable
-                }
+                updateHandBackPackage(packages, handBackBody, row, v.toString())
             })
         }
 
@@ -123,6 +99,8 @@ fun HandBackScreen(
     if (uiState.userMessage?.isNotEmpty() == true) {
         // Show message dialog
         Toast.makeText(context, uiState.userMessage, Toast.LENGTH_SHORT).show()
+
+        viewModel.resetUserMessage()
     }
 }
 

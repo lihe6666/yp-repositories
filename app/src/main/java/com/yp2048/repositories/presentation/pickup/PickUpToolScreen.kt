@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -29,6 +30,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.yp2048.repositories.R
 import com.yp2048.repositories.presentation.components.PickUpTable
+import com.yp2048.repositories.presentation.components.updatePickUpPackage
 
 @Composable
 fun PickUpToolScreen(
@@ -47,40 +49,15 @@ fun PickUpToolScreen(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        var packages = mutableMapOf<String, List<Device>>()
+        val devices = mutableMapOf<String, Device>()
+        val packages = mutableMapOf<String, MutableList<Device>>()
 
-        Column(modifier = modifier.weight(1F)) {
+        Column(modifier = modifier.weight(1f)) {
 
-            PickUpTable(tableData = uiState.tools, increment = { row, v ->
-
-                if (packages.containsKey(row.storageRack.toString())) {
-                    // 遍历工具
-                    packages[row.storageRack.toString()]?.forEach {
-                        if (it.id == row.id) {
-                            it.deviceNumber = v.toString()
-                            return@forEach
-                        }
-                    }
-
-                    return@PickUpTable
-                }
-
-                val body: MutableList<Device> = mutableListOf()
-                body.add(Device(id = row.storageRack.toString(), deviceNumber = v.toString()))
-                packages = packages.toMutableMap().apply {
-                    put(row.storageRack.toString(), body)
-                }
+            PickUpTable(tableData = uiState.data, increment = { row, v ->
+                updatePickUpPackage(packages, devices, row, v.toString())
             }, decrease = { row, v ->
-                if (packages.containsKey(row.storageRack.toString())) {
-                    // 遍历工具
-                    packages[row.storageRack.toString()]?.forEach {
-                        if (it.id == row.id) {
-                            it.deviceNumber = v.toString()
-                            return@forEach
-                        }
-                    }
-                    return@PickUpTable
-                }
+                updatePickUpPackage(packages, devices, row, v.toString())
             })
         }
 
@@ -90,38 +67,44 @@ fun PickUpToolScreen(
                 .padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            Button(onClick = {
-                viewModel.updatePickUpPackages(packages)
+            Button(
+                modifier = modifier.width(200.dp),
+                onClick = {
+                    viewModel.updatePickUpPackages(packages)
 
-            }) {
+                }) {
                 Text(text = stringResource(id = R.string.apply))
             }
 
-            Button(onClick = {
-                navController.navigate("Menu")
-            }) {
+            Button(
+                modifier = modifier.width(200.dp),
+                onClick = {
+                    navController.navigate("Menu")
+                }) {
                 Text(text = stringResource(id = R.string.cancel))
             }
         }
+    }
 
-        if (uiState.isLoading) {
-            // Show loading dialog
-            Box(
-                modifier = modifier
-                    .clickable {
-                    }
-                    .fillMaxSize()
-                    .background(Color.Gray.copy(alpha = 0.5f)),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+    if (uiState.isLoading) {
+        // Show loading dialog
+        Box(
+            modifier = modifier
+                .clickable {
+                }
+                .fillMaxSize()
+                .background(Color.Gray.copy(alpha = 0.5f)),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
+    }
 
-        if (uiState.userMessage?.isNotEmpty() == true) {
-            // Show message dialog
-            Toast.makeText(context, uiState.userMessage, Toast.LENGTH_SHORT).show()
-        }
+    if (uiState.userMessage?.isNotEmpty() == true) {
+        // Show message dialog
+        Toast.makeText(context, uiState.userMessage, Toast.LENGTH_SHORT).show()
+
+        viewModel.resetUserMessage()
     }
 }
 
