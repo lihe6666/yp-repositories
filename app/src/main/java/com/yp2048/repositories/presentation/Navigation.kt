@@ -20,7 +20,7 @@ enum class Screen(val route: String) {
     Menu("Menu"),
     PickUpBoard("PickUpBoard"),
     PickUpTool("PickUpTool/{id}"),
-    PickUpGuide("PickUpGuide"),
+    PickUpGuide("PickUpGuide/{id}"),
     HandBack("HandBack"),
     HandBackGuide("HandBackGuide")
 }
@@ -58,8 +58,17 @@ fun Navigation() {
                 id = it.arguments?.getString("id")
             )
         }
-        composable(Screen.PickUpGuide.route) {
-            PickUpGuideScreen(navController = navController)
+        composable(Screen.PickUpGuide.route, arguments = listOf(
+            navArgument("id") {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = "0"
+            }
+        )) {
+            PickUpGuideScreen(
+                navController = navController,
+                id = it.arguments?.getString("id") ?: "0"
+            )
         }
         composable(Screen.HandBack.route) {
             HandBackScreen(navController = navController)

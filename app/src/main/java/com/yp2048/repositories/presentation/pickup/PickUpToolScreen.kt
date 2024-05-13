@@ -106,6 +106,10 @@ fun PickUpToolScreen(
 
         viewModel.resetUserMessage()
     }
+
+    if (uiState.isRoadMap) {
+        navController.navigate("PickUpGuide/${id}")
+    }
 }
 
 @Preview

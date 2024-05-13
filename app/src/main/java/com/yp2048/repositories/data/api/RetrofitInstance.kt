@@ -14,9 +14,14 @@ object RetrofitInstance {
 
     private const val BASE_URL = "http://192.168.2.60:8080/"
 
-    var httpClient: OkHttpClient = OkHttpClient.Builder()
+    private var httpClient: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS) // 设置连接超时时间
         .readTimeout(10, TimeUnit.SECONDS) // 设置读取超时时间
+        .build()
+
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(AuthInterceptor())
+        .addInterceptor(ErrorInterceptor())
         .build()
 
     private val moshi: Moshi = Moshi.Builder()
@@ -31,10 +36,6 @@ object RetrofitInstance {
             .build()
         retrofit.create(ScanFaceService::class.java)
     }
-
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(AuthInterceptor())
-        .build()
 
     val pickUpServer: PickUpServer by lazy {
         val retrofit = Retrofit.Builder()

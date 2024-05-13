@@ -61,7 +61,7 @@ class PickUpToolViewModel: ViewModel() {
 
                 if (response.code == 200) {
                     _uiState.update {
-                        it.copy(data = response.rows)
+                        it.copy(isRoadMap = true)
                     }
                 }
             } catch (e: IOException) {
@@ -85,6 +85,7 @@ data class PickUpUiState(
     val selectedTools: List<Int> = emptyList(),
     val userMessage: String? = "",
     val isLoading: Boolean = false,
+    val isRoadMap: Boolean = false
 )
 
 @JsonClass(generateAdapter = true)
