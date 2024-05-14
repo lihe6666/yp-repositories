@@ -44,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.yp2048.repositories.R
 import kotlinx.coroutines.launch
@@ -55,7 +56,7 @@ import java.io.File
 @Composable
 fun MainScreen(
     navController: NavController,
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel = viewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current as Activity
@@ -200,8 +201,6 @@ fun MainScreen(
                 uiState.userMessage,
                 Toast.LENGTH_SHORT
             ).show()
-
-            mainViewModel.resetUserMessage()
         }
     }
 }

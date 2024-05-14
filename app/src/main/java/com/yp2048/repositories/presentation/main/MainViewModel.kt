@@ -33,6 +33,31 @@ class MainViewModel: ViewModel() {
         }
     }
 
+    fun updateDoorState()  {
+        _uiState.update {
+            it.copy(isLoading = true)
+        }
+
+        viewModelScope.launch {
+            val response = apiService.setDoorState("1")
+
+            if (response.code == 200) {
+                _uiState.update {
+                    it.copy(userMessage = response.msg)
+                }
+            } else {
+                _uiState.update {
+                    it.copy(userMessage = response.msg)
+                }
+            }
+
+            delay(3000)
+            _uiState.update {
+                it.copy(isLoading = false)
+            }
+        }
+    }
+
     fun requestScanFace(file: MultipartBody.Part) {
         // Loading
         _uiState.update {
@@ -48,22 +73,22 @@ class MainViewModel: ViewModel() {
                     TokenManager.setToken(response.data?.token)
 
                     _uiState.update {
-                        it.copy(isScanFace = true)
+                        it.copy(isScanFace = true, userMessage = response.msg)
                     }
 
-                    return@launch
                 } else {
                     _uiState.update {
                         it.copy(userMessage = response.msg)
                     }
                 }
+
+                delay(3000)
             } catch (e: IOException) {
                 _uiState.update {
                     it.copy(userMessage = "网络错误，请稍后重试")
                 }
             }
 
-            delay(3000)
             _uiState.update {
                 it.copy(isLoading = false, isButtonState = true)
             }
