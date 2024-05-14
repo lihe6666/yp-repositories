@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.converter.moshi)
 
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.rules)
+    implementation(libs.androidx.media3.common)
     ksp(libs.androidx.room.compiler)
 
     // ViewModel
@@ -133,4 +135,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.androidx.uiautomator)
 }
