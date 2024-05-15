@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.yp2048.repositories.data.repository.ScanFaceRepository
 import com.yp2048.repositories.presentation.handback.HandBackGuideScreen
 import com.yp2048.repositories.presentation.handback.HandBackScreen
 import com.yp2048.repositories.presentation.main.MainScreen

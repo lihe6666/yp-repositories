@@ -13,7 +13,9 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import java.io.IOException
 
-class MainViewModel(private val scanFaceRepository: ScanFaceRepository): ViewModel() {
+class MainViewModel(
+    private val scanFaceRepository: ScanFaceRepository = ScanFaceRepository()
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()

@@ -6,8 +6,8 @@ import com.yp2048.repositories.data.remote.ScanFaceRemoteDataSource
 import okhttp3.MultipartBody
 
 class ScanFaceRepository(
-    private val scanFaceRemoteDataSource: ScanFaceRemoteDataSource,
-    private val scanFaceLocalDataSource: ScanFaceLocalDataSource
+    private val scanFaceRemoteDataSource: ScanFaceRemoteDataSource = ScanFaceRemoteDataSource(),
+    private val scanFaceLocalDataSource: ScanFaceLocalDataSource = ScanFaceLocalDataSource()
 ) {
 
     suspend fun setFaceLogin(file: MultipartBody.Part): LoginResponse {
