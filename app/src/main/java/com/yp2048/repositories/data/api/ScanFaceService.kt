@@ -1,5 +1,6 @@
 package com.yp2048.repositories.data.api
 
+import com.yp2048.repositories.data.remote.LoginResponse
 import okhttp3.MultipartBody
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -15,14 +16,3 @@ interface ScanFaceService {
     @GET("/store/api/relay/{state}")
     suspend fun setDoorState(@Path("state") state: String): LoginResponse
 }
-
-
-data class LoginResponse(
-    val code: Int,
-    val msg: String,
-    val data: LoginData?
-)
-
-data class LoginData(
-    val token: String
-)

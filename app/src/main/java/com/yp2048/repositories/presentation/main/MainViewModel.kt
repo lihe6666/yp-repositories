@@ -2,8 +2,7 @@ package com.yp2048.repositories.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yp2048.repositories.data.api.RetrofitInstance
-import com.yp2048.repositories.data.api.ScanFaceService
+import com.yp2048.repositories.data.repository.ScanFaceRepository
 import com.yp2048.repositories.presentation.TokenManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,9 +13,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import java.io.IOException
 
-class MainViewModel: ViewModel() {
-
-    private val  apiService: ScanFaceService = RetrofitInstance.apiService
+class MainViewModel(private val scanFaceRepository: ScanFaceRepository): ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
@@ -29,7 +26,7 @@ class MainViewModel: ViewModel() {
 
     fun updateButtonState(state: Boolean = false) {
         _uiState.update {
-            it.copy(isButtonState = false)
+            it.copy(isButtonState = state)
         }
     }
 
@@ -39,7 +36,8 @@ class MainViewModel: ViewModel() {
         }
 
         viewModelScope.launch {
-            val response = apiService.setDoorState("1")
+            // try catch
+            val response = scanFaceRepository.setDoorState("1")
 
             if (response.code == 200) {
                 _uiState.update {
@@ -67,7 +65,7 @@ class MainViewModel: ViewModel() {
         viewModelScope.launch {
             // api call
             try {
-                val response = apiService.setFaceLogin(file)
+                val response = scanFaceRepository.setFaceLogin(file)
 
                 if (response.code == 200) {
                     TokenManager.setToken(response.data?.token)

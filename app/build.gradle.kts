@@ -53,6 +53,9 @@ android {
 
 dependencies {
 
+    implementation (platform(libs.androidx.compose.bom.v105))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
     implementation(libs.retrofit)
 
     implementation(libs.moshi)
@@ -62,6 +65,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.rules)
     implementation(libs.androidx.media3.common)
+    implementation(libs.androidx.benchmark.common)
     ksp(libs.androidx.room.compiler)
 
     // ViewModel
@@ -82,8 +86,6 @@ dependencies {
 
     // Saved state module for ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.savedstate)
-    // optional - Test helpers for LiveData
-    testImplementation(libs.androidx.core.testing)
 
     // optional - Test helpers for Lifecycle runtime
     testImplementation (libs.androidx.lifecycle.runtime.testing)
@@ -97,13 +99,8 @@ dependencies {
     // Feature module Support
     implementation(libs.androidx.navigation.dynamic.features.fragment)
 
-    // Testing Navigation
-    androidTestImplementation(libs.androidx.navigation.testing)
-
     // Jetpack Compose Integration
     implementation(libs.androidx.navigation.compose)
-
-
     // CameraX core library using the camera2 implementation
     // The following line is optional, as the core library is included indirectly by camera-camera2
     implementation(libs.androidx.camera.core)
@@ -118,7 +115,6 @@ dependencies {
     // implementation(libs.androidx.camera.mlkit.vision)
     // If you want to additionally use the CameraX Extensions library
     implementation(libs.androidx.camera.extensions)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -128,12 +124,24 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+
+    // Required -- JUnit 4 framework
     testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.androidx.core)
+    testImplementation(libs.mockk)
+    // optional - Test helpers for LiveData
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.mockito.inline)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.uiautomator)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    androidTestImplementation(libs.androidx.uiautomator)
+    // Testing Navigation
+    androidTestImplementation(libs.androidx.navigation.testing)
 }
