@@ -32,7 +32,6 @@ fun updateHandBackPackage(
 fun Warehouse(
     modifier: Modifier = Modifier,
     rows: Int = 10,
-    total: Int = 100,
     content: @Composable () -> Unit,
 ) {
 
@@ -48,7 +47,7 @@ fun Warehouse(
         }
 
         // Calculate total width and height of all items
-        val totalWidth = placeableGroup.sumOf { it.width } / rows
+//        val totalWidth = placeableGroup.sumOf { it.width } / rows
 
         // Set the size of the layout as big as it can
         layout(constraints.maxWidth, constraints.maxHeight) {

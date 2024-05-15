@@ -73,7 +73,7 @@ fun PickUpGuideScreen(
 
                     uiState.data.list.forEach {
                         if (it.y.toInt() == 0) {
-                            rows++;
+                            rows++
                         }
                         total++
                     }
@@ -82,8 +82,7 @@ fun PickUpGuideScreen(
                     val elementHeight = dpHeight / (total / rows)
                     Warehouse(
                         modifier = modifier,
-                        rows = rows,
-                        total = total
+                        rows = rows
                     ) {
                         for (j in 0..uiState.data.list.size) {
                             for (k in uiState.data.storageRackList) {

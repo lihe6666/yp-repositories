@@ -80,8 +80,7 @@ fun PickUpBoardScreen(
                     val elementHeight = dpHeight / (total / rows)
                     Warehouse(
                         modifier = modifier,
-                        rows = rows,
-                        total = total
+                        rows = rows
                     ) {
                         for (j in 0..uiState.data.list.size) {
                             for (k in uiState.data.storageRackList) {
