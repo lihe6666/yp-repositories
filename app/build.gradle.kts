@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -47,20 +48,25 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{AL2.0,LGPL2.1,*.md}"
         }
     }
 }
 
 dependencies {
-    // compose
+    // androidx.compose.ui:ui
     implementation(libs.androidx.ui)
-
+    // androidx.compose.ui:ui-tooling
+    implementation(libs.androidx.ui.tooling)
+    // androidx.compose:compose-bom
     implementation (platform(libs.androidx.compose.bom))
+    // com.squareup.retrofit2:retrofit
     implementation(libs.retrofit)
-
+    // com.squareup.moshi:moshi
     implementation(libs.moshi)
+    // com.squareup.moshi:moshi-kotlin
     implementation(libs.moshi.kotlin)
+    // com.squareup.retrofit2:converter-moshi
     implementation(libs.converter.moshi)
 
     implementation(libs.androidx.room.ktx)
@@ -139,7 +145,10 @@ dependencies {
     // Testing Navigation
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.mockk.android)
+
+    // androidx.compose.ui:ui-test-junit4
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
+    // androidx.compose.ui:ui-test-manifest
     debugImplementation(libs.androidx.ui.test.manifest)
 }
