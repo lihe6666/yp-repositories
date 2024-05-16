@@ -2,9 +2,8 @@ package com.yp2048.repositories.presentation.pickup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yp2048.repositories.data.api.PickUpResponse
-import com.yp2048.repositories.data.api.RetrofitInstance
 import com.yp2048.repositories.data.api.WarehouseData
+import com.yp2048.repositories.data.repository.PickUpRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,9 +13,9 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.ConnectException
 
-class PickUpGuideViewModel : ViewModel() {
-
-    private val pickUpServer = RetrofitInstance.pickUpServer
+class PickUpGuideViewModel(
+    private val pickUpRepository: PickUpRepository = PickUpRepository()
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PickUpGuideUiState())
     val uiState: StateFlow<PickUpGuideUiState> = _uiState.asStateFlow()
@@ -36,7 +35,7 @@ class PickUpGuideViewModel : ViewModel() {
             delay(3000)
 
             try {
-                val response = pickUpServer.getWarehouseInformation()
+                val response = pickUpRepository.getWarehouseInformation()
 
                 if (response.code == 200) {
                     _uiState.update {

@@ -8,19 +8,21 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.io.IOException
+import java.net.ConnectException
 import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
 
     private const val BASE_URL = "http://192.168.2.60:8080/"
 
-    private var httpClient: OkHttpClient = OkHttpClient.Builder()
+    private val httpClient: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS) // 设置连接超时时间
         .readTimeout(10, TimeUnit.SECONDS) // 设置读取超时时间
         .build()
 
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(AuthInterceptor())
+    private val authClient: OkHttpClient = httpClient.newBuilder()
+        .addInterceptor(AuthInterceptor()) // 添加认证拦截器
         .addInterceptor(ErrorInterceptor())
         .build()
 
@@ -40,8 +42,8 @@ object RetrofitInstance {
     val pickUpServer: PickUpServer by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(authClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .client(httpClient)
             .build()
         retrofit.create(PickUpServer::class.java)
     }
@@ -49,23 +51,38 @@ object RetrofitInstance {
     val handBackService: HandBackService by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .client(httpClient)
+            .client(authClient)
             .build()
+
         retrofit.create(HandBackService::class.java)
     }
 }
 
 class AuthInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
+        val originalRequest = chain.request()
 
+        // 从 TokenManager 获取令牌
         val token = TokenManager.getToken()
-        val request = chain.request()
-            .newBuilder()
+
+        // 构建包含 Authorization 头部的新请求
+        val requestWithAuth = originalRequest.newBuilder()
             .addHeader("Authorization", "Bearer $token")
             .build()
 
-        return chain.proceed(request)
+        return chain.proceed(requestWithAuth)
     }
 }
+
+class ErrorInterceptor : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        try {
+            return chain.proceed(chain.request())
+        } catch (e: ConnectException) {
+            throw LocalConnectException(e)
+        }
+    }
+}
+
+class LocalConnectException(cause: Throwable) : IOException("连接被拒绝", cause)

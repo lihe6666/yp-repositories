@@ -26,13 +26,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.yp2048.repositories.R
-import com.yp2048.repositories.presentation.main.MainViewModel
+import com.yp2048.repositories.presentation.handback.HandBackViewModel
 
 @Composable
 fun MenuScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: MainViewModel = viewModel()
+    viewModel: HandBackViewModel = viewModel()
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
@@ -82,32 +82,32 @@ fun MenuScreen(
             Button(onClick = {
                 TokenManager.setToken(null)
                 
-                navController.navigateUp()
+                navController.popBackStack("Main", false)
             }, modifier = Modifier.width(200.dp)) {
                 Text(text = stringResource(id = R.string.go_to_homepage))
             }
         }
+    }
 
-        if (uiState.isLoading) {
-            // Loading
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+    if (uiState.isLoading) {
+        // Loading
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
+    }
 
-        if (uiState.userMessage.isNotEmpty()) {
-            // Show toast
-            Toast.makeText(
-                context,
-                uiState.userMessage,
-                Toast.LENGTH_SHORT
-            ).show()
+    if (uiState.userMessage?.isNotEmpty() == true) {
+        // Show toast
+        Toast.makeText(
+            context,
+            uiState.userMessage,
+            Toast.LENGTH_SHORT
+        ).show()
 
-            viewModel.resetUserMessage()
-        }
+        viewModel.resetUserMessage()
     }
 }
 

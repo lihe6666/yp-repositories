@@ -3,8 +3,8 @@ package com.yp2048.repositories.presentation.pickup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.squareup.moshi.JsonClass
-import com.yp2048.repositories.data.api.RetrofitInstance
 import com.yp2048.repositories.data.api.PickUpData
+import com.yp2048.repositories.data.repository.PickUpRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,9 +13,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class PickUpToolViewModel: ViewModel() {
-
-    private val toolsService = RetrofitInstance.pickUpServer
+class PickUpToolViewModel(
+    private val pickUpRepository: PickUpRepository = PickUpRepository()
+): ViewModel() {
 
     // StateFlow
     private val _uiState = MutableStateFlow(PickUpUiState())
@@ -34,7 +34,7 @@ class PickUpToolViewModel: ViewModel() {
                 it.copy(isLoading = true)
             }
 
-            val response = toolsService.getStoreGoodsApiVo(id)
+            val response = pickUpRepository.getStoreGoodsApiVo(id)
             if (response.code == 200) {
                 _uiState.update {
                     it.copy(
@@ -57,7 +57,7 @@ class PickUpToolViewModel: ViewModel() {
             }
 
             try {
-                val response = toolsService.setStoreReceiveGoodLog(body)
+                val response = pickUpRepository.setStoreReceiveGoodLog(body)
 
                 if (response.code == 200) {
                     _uiState.update {

@@ -12,7 +12,4 @@ interface ScanFaceService {
     @Multipart
     @POST("/store/api/setFaceLogin")
     suspend fun setFaceLogin(@Part filePart: MultipartBody.Part): LoginResponse
-
-    @GET("/store/api/relay/{state}")
-    suspend fun setDoorState(@Path("state") state: String): LoginResponse
 }

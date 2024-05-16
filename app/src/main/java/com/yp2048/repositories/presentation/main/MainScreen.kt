@@ -194,13 +194,15 @@ fun MainScreen(
             navController.navigate("Menu")
         }
 
-        if (uiState.userMessage.isNotEmpty()) {
+        if (uiState.userMessage?.isNotEmpty() == true) {
             // Show toast
             Toast.makeText(
                 context,
                 uiState.userMessage,
                 Toast.LENGTH_SHORT
             ).show()
+
+            mainViewModel.resetUserMessage()
         }
     }
 }

@@ -1,10 +1,12 @@
 package com.yp2048.repositories.data.api
 
 import com.squareup.moshi.JsonClass
+import com.yp2048.repositories.data.remote.LoginResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface HandBackService {
 
@@ -14,6 +16,9 @@ interface HandBackService {
     @Headers("Content-Type: application/json")
     @POST("/store/api/getStoreReceiveGoodLog")
     suspend fun getStoreReceiveGoodLog(@Body body: MutableMap<String, MutableList<HandBackBody>>): HandBackResponse
+
+    @GET("/store/api/relay/{typeId}")
+    suspend fun setDoorState(@Path("typeId") typeId: String): LoginResponse
 }
 
 

@@ -7,10 +7,6 @@ class ScanFaceRemoteDataSource {
     suspend fun setFaceLogin(file: MultipartBody.Part): LoginResponse {
         return RetrofitInstance.apiService.setFaceLogin(file)
     }
-
-    suspend fun setDoorState(state: String): LoginResponse {
-        return RetrofitInstance.apiService.setDoorState(state)
-    }
 }
 
 data class LoginResponse(

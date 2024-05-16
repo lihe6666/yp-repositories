@@ -22,39 +22,13 @@ class MainViewModel(
 
     fun resetUserMessage() {
         _uiState.update {
-            it.copy(userMessage = "")
+            it.copy(userMessage = null)
         }
     }
 
     fun updateButtonState(state: Boolean = false) {
         _uiState.update {
             it.copy(isButtonState = state)
-        }
-    }
-
-    fun updateDoorState()  {
-        _uiState.update {
-            it.copy(isLoading = true)
-        }
-
-        viewModelScope.launch {
-            // try catch
-            val response = scanFaceRepository.setDoorState("1")
-
-            if (response.code == 200) {
-                _uiState.update {
-                    it.copy(userMessage = response.msg)
-                }
-            } else {
-                _uiState.update {
-                    it.copy(userMessage = response.msg)
-                }
-            }
-
-            delay(3000)
-            _uiState.update {
-                it.copy(isLoading = false)
-            }
         }
     }
 
@@ -75,7 +49,6 @@ class MainViewModel(
                     _uiState.update {
                         it.copy(isScanFace = true, userMessage = response.msg)
                     }
-
                 } else {
                     _uiState.update {
                         it.copy(userMessage = response.msg)
@@ -99,6 +72,6 @@ class MainViewModel(
 data class MainUiState(
     val isScanFace: Boolean = false,
     val isButtonState: Boolean = true,
-    val userMessage: String = "",
+    val userMessage: String? = null,
     val isLoading: Boolean = false
 )

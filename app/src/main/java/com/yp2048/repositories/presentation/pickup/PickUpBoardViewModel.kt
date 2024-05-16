@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yp2048.repositories.data.api.RetrofitInstance
 import com.yp2048.repositories.data.api.WarehouseData
+import com.yp2048.repositories.data.repository.PickUpRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,9 +13,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class PickUpBoardViewModel: ViewModel() {
-
-    private val pickUpServer = RetrofitInstance.pickUpServer
+class PickUpBoardViewModel(
+    private val pickUpRepository: PickUpRepository = PickUpRepository()
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(PickUpBoardUiState())
     val uiState: StateFlow<PickUpBoardUiState> = _uiState.asStateFlow()
@@ -31,7 +32,7 @@ class PickUpBoardViewModel: ViewModel() {
         }
         viewModelScope.launch {
             try {
-                val response = pickUpServer.getWarehouseInformation()
+                val response = pickUpRepository.getWarehouseInformation()
 
                 if (response.code == 200) {
                     _uiState.update {

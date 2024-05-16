@@ -14,9 +14,4 @@ class ScanFaceRepository(
         // 优先从远程数据源获取数据
         return scanFaceRemoteDataSource.setFaceLogin(file)
     }
-
-    suspend fun setDoorState(state: String): LoginResponse {
-        // 优先从远程数据源获取数据
-        return scanFaceRemoteDataSource.setDoorState(state)
-    }
 }
