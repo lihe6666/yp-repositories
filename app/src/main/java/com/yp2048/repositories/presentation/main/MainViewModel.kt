@@ -3,6 +3,7 @@ package com.yp2048.repositories.presentation.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yp2048.repositories.data.repository.ScanFaceRepository
+import com.yp2048.repositories.presentation.MainUiState
 import com.yp2048.repositories.presentation.TokenManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,10 +70,3 @@ class MainViewModel(
         }
     }
 }
-
-data class MainUiState(
-    val isScanFace: Boolean = false,
-    val isButtonState: Boolean = true,
-    val userMessage: String? = null,
-    val isLoading: Boolean = false
-)

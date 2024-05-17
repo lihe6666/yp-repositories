@@ -47,6 +47,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.yp2048.repositories.R
+import com.yp2048.repositories.presentation.components.CircleLoading
+import com.yp2048.repositories.presentation.components.ShowToast
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -180,28 +182,17 @@ fun MainScreen(
             }
         }
 
-        if (uiState.isLoading) {
+        uiState.isLoading?.let {
             // Loading
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+            CircleLoading()
         }
 
-        if (uiState.isScanFace) {
+        uiState.isScanFace?.let {
             navController.navigate("Menu")
         }
 
-        if (uiState.userMessage?.isNotEmpty() == true) {
-            // Show toast
-            Toast.makeText(
-                context,
-                uiState.userMessage,
-                Toast.LENGTH_SHORT
-            ).show()
-
+        uiState.userMessage?.let {
+            ShowToast(message = uiState.userMessage!!)
             mainViewModel.resetUserMessage()
         }
     }
