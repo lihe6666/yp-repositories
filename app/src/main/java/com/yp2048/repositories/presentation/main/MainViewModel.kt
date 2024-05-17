@@ -5,13 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.yp2048.repositories.data.repository.ScanFaceRepository
 import com.yp2048.repositories.presentation.MainUiState
 import com.yp2048.repositories.presentation.TokenManager
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import retrofit2.HttpException
 import java.io.IOException
 
 class MainViewModel(
@@ -56,6 +56,10 @@ class MainViewModel(
                     }
                 }
             } catch (e: IOException) {
+                _uiState.update {
+                    it.copy(userMessage = "网络错误，请稍后重试")
+                }
+            } catch (e: HttpException) {
                 _uiState.update {
                     it.copy(userMessage = "网络错误，请稍后重试")
                 }

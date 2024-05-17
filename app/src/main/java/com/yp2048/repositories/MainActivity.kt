@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import com.yp2048.repositories.presentation.Navigation
 import com.yp2048.repositories.ui.theme.RepositoriesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val permissionsLauncher =

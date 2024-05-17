@@ -44,7 +44,6 @@ fun PickUpToolScreen(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        val devices = mutableMapOf<String, Device>()
         val packages = mutableMapOf<String, MutableList<Device>>()
 
         Column(modifier = modifier.weight(1f)) {
