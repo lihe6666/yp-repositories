@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,7 +47,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.yp2048.repositories.R
 import com.yp2048.repositories.presentation.components.CircleLoading
-import com.yp2048.repositories.presentation.components.ShowToast
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -182,17 +180,20 @@ fun MainScreen(
             }
         }
 
-        uiState.isLoading?.let {
-            // Loading
+        if (uiState.isLoading) {
             CircleLoading()
         }
 
-        uiState.isScanFace?.let {
+        if (uiState.isScanFace) {
             navController.navigate("Menu")
         }
 
         uiState.userMessage?.let {
-            ShowToast(message = uiState.userMessage!!)
+            Toast.makeText(
+                context,
+                uiState.userMessage,
+                Toast.LENGTH_SHORT
+            ).show()
             mainViewModel.resetUserMessage()
         }
     }

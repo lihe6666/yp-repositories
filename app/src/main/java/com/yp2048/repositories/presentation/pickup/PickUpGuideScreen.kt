@@ -137,8 +137,6 @@ fun PickUpGuideScreen(
                     val forwardRoute = uiState.data.storageRackList[id.toInt()].route0
                     Canvas(modifier = modifier.background(Color.Blue)) {
                         var i = 0
-
-
                         val toWidthPx = (elementWidth * context.resources.displayMetrics.density)
                         val toHeightPx = (elementHeight * context.resources.displayMetrics.density)
                         val toWidthPath =
@@ -163,8 +161,6 @@ fun PickUpGuideScreen(
                         }
                     }
                 }
-
-
             }
         }
 

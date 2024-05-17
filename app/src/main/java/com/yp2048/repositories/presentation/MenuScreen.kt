@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.yp2048.repositories.R
+import com.yp2048.repositories.presentation.components.CircleLoading
 import com.yp2048.repositories.presentation.handback.HandBackViewModel
 
 @Composable
@@ -91,16 +91,10 @@ fun MenuScreen(
 
     if (uiState.isLoading) {
         // Loading
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
+        CircleLoading()
     }
 
-    if (uiState.userMessage?.isNotEmpty() == true) {
-        // Show toast
+    uiState.userMessage?.let {
         Toast.makeText(
             context,
             uiState.userMessage,

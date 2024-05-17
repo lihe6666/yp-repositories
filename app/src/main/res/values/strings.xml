@@ -3,7 +3,7 @@
 
     <string name="scan_face">请刷脸</string>
 
-    <string name="go_back_login">返回登录</string>
+    <string name="go_back_login">返回</string>
     <string name="quit">退出</string>
 
     <string name="into_storage_room">进入库房</string>

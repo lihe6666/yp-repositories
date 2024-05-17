@@ -42,7 +42,8 @@ fun HandBackTable(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .background(Color.LightGray), horizontalArrangement = Arrangement.SpaceBetween
+                .background(Color.LightGray),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             header.forEach {
                 Column(
@@ -99,7 +100,8 @@ fun HandBackTable(
                             modifier = modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceAround
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             TextButton(
                                 modifier = modifier.size(28.dp),
@@ -123,7 +125,6 @@ fun HandBackTable(
                                 Text(text = "+")
                             }
                         }
-
                     }
                 }
                 HorizontalDivider()

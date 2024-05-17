@@ -1,12 +1,45 @@
 package com.yp2048.repositories.presentation.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import com.yp2048.repositories.data.api.HandBackBody
 import com.yp2048.repositories.data.api.HandBackData
 import com.yp2048.repositories.data.api.PickUpData
 import com.yp2048.repositories.presentation.pickup.Device
+
+suspend fun userShowSnackBar(
+    snackBarHostState: SnackbarHostState,
+    message: String = "") {
+
+    snackBarHostState.showSnackbar(
+        message = message)
+}
+
+@Composable
+fun CircleLoading(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .clickable {
+            }
+            .fillMaxSize()
+            .background(Color.Gray.copy(alpha = 0.5f)),
+        contentAlignment = Alignment.Center
+    ) {
+        // 这里如何如何加默认值
+        CircularProgressIndicator()
+    }
+}
 
 fun updatePickUpPackage(
     packages: MutableMap<String, MutableList<Device>>,
@@ -20,10 +53,10 @@ fun updatePickUpPackage(
 
 fun updateHandBackPackage(
     packages: MutableMap<String, MutableList<HandBackBody>>,
-    devices: MutableMap<String, HandBackBody>,
     row: HandBackData,
     v: String
 ) {
+    val devices = mutableMapOf<String, HandBackBody>()
     devices[row.id] = HandBackBody(row.storageId, deviceNumber = v.toInt(), giveBackId = row.id)
     packages[row.storageId] = devices.values.toMutableList()
 }

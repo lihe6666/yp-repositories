@@ -41,7 +41,6 @@ class MainViewModel(
 
         viewModelScope.launch {
             // api call
-            delay(1500)
             try {
                 val response = scanFaceRepository.setFaceLogin(file)
 
@@ -56,8 +55,6 @@ class MainViewModel(
                         it.copy(userMessage = response.msg)
                     }
                 }
-
-                delay(1500)
             } catch (e: IOException) {
                 _uiState.update {
                     it.copy(userMessage = "网络错误，请稍后重试")
