@@ -19,9 +19,7 @@ class MainActivity : ComponentActivity() {
 
     private val permissionsLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            if (permissions.all { it.value }) {
-                // 如果用户授予了所需的权限，初始化应用
-            } else {
+            if (!permissions.all { it.value }) {
                 // 如果用户拒绝了权限请求，显示一个提示并退出应用
                 Toast.makeText(
                     this,
