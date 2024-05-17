@@ -43,10 +43,10 @@ fun CircleLoading(
 
 fun updatePickUpPackage(
     packages: MutableMap<String, MutableList<Device>>,
-    devices: MutableMap<String, Device>,
     row: PickUpData,
     v: String
 ) {
+    val devices = mutableMapOf<String, Device>()
     devices[row.id] = Device(row.id, deviceNumber = v)
     packages[row.storageRack.toString()] = devices.values.toMutableList()
 }

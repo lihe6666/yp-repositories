@@ -50,9 +50,9 @@ fun PickUpToolScreen(
         Column(modifier = modifier.weight(1f)) {
 
             PickUpTable(tableData = uiState.data, increment = { row, v ->
-                updatePickUpPackage(packages, devices, row, v.toString())
+                updatePickUpPackage(packages, row, v.toString())
             }, decrease = { row, v ->
-                updatePickUpPackage(packages, devices, row, v.toString())
+                updatePickUpPackage(packages, row, v.toString())
             })
         }
 
@@ -86,15 +86,14 @@ fun PickUpToolScreen(
         CircleLoading()
     }
 
-    if (uiState.userMessage?.isNotEmpty() == true) {
-        // Show message dialog
-        Toast.makeText(context, uiState.userMessage, Toast.LENGTH_SHORT).show()
-
-        viewModel.resetUserMessage()
-    }
-
     if (uiState.isRoadMap) {
         navController.navigate("PickUpGuide/${id}")
+    }
+
+    uiState.userMessage?.let {
+        // Show message dialog
+        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        viewModel.resetUserMessage()
     }
 }
 
