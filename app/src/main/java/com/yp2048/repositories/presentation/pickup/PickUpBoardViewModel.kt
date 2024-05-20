@@ -22,7 +22,7 @@ class PickUpBoardViewModel(
 
     fun resetUserMessage() {
         _uiState.update {
-            it.copy(userMessage = "")
+            it.copy(userMessage = null)
         }
     }
 
@@ -66,5 +66,5 @@ data class PickUpBoardUiState(
         storageRackList = listOf()
     ),
     val isLoading: Boolean = false,
-    val userMessage: String = ""
+    val userMessage: String? = null
 )

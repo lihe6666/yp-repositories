@@ -22,7 +22,7 @@ class PickUpGuideViewModel(
 
     fun resetUserMessage() {
         _uiState.update {
-            it.copy(userMessage = "")
+            it.copy(userMessage = null)
         }
     }
 
@@ -71,6 +71,6 @@ data class PickUpGuideUiState(
         storageRackList = listOf()
     ),
     val selectedTools: List<Int> = emptyList(),
-    val userMessage: String = "",
+    val userMessage: String? = null,
     val isLoading: Boolean = false,
 )

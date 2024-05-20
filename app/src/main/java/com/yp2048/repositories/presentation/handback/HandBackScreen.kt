@@ -86,7 +86,7 @@ fun HandBackScreen(
         CircleLoading()
     }
 
-    if (uiState.userMessage?.isNotEmpty() == true) {
+    uiState.userMessage?.let {
         // Show message dialog
         Toast.makeText(context, uiState.userMessage, Toast.LENGTH_SHORT).show()
         viewModel.resetUserMessage()

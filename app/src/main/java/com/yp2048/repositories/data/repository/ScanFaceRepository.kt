@@ -4,10 +4,13 @@ import com.yp2048.repositories.data.local.ScanFaceLocalDataSource
 import com.yp2048.repositories.data.remote.LoginResponse
 import com.yp2048.repositories.data.remote.ScanFaceRemoteDataSource
 import okhttp3.MultipartBody
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ScanFaceRepository(
-    private val scanFaceRemoteDataSource: ScanFaceRemoteDataSource = ScanFaceRemoteDataSource(),
-    private val scanFaceLocalDataSource: ScanFaceLocalDataSource = ScanFaceLocalDataSource()
+@Singleton
+class ScanFaceRepository @Inject constructor(
+    private val scanFaceRemoteDataSource: ScanFaceRemoteDataSource,
+    private val scanFaceLocalDataSource: ScanFaceLocalDataSource
 ) {
 
     suspend fun setFaceLogin(file: MultipartBody.Part): LoginResponse {

@@ -49,6 +49,7 @@ fun PickUpGuideScreen(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.fetchWarehouseInformation()
+        viewModel.resetUserMessage()
     }
 
     Column(
@@ -192,7 +193,7 @@ fun PickUpGuideScreen(
         }
     }
 
-    if (uiState.userMessage.isNotEmpty()) {
+    uiState.userMessage?.let {
         // Show toast
         Toast.makeText(
             context,

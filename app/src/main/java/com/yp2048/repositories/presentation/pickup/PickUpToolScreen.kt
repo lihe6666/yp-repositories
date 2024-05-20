@@ -40,6 +40,7 @@ fun PickUpToolScreen(
     LaunchedEffect(key1 = Unit) {
         if (id != null) {
             viewModel.updateTools(id = id)
+            viewModel.resetUserMessage()
         }
     }
 

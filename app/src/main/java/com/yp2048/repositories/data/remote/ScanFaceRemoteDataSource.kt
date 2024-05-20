@@ -2,8 +2,9 @@ package com.yp2048.repositories.data.remote
 
 import com.yp2048.repositories.data.api.RetrofitInstance
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class ScanFaceRemoteDataSource {
+class ScanFaceRemoteDataSource @Inject constructor() {
     suspend fun setFaceLogin(file: MultipartBody.Part): LoginResponse {
         return RetrofitInstance.apiService.setFaceLogin(file)
     }

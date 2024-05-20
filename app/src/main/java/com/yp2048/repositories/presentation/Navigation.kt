@@ -1,6 +1,7 @@
 package com.yp2048.repositories.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,10 +33,7 @@ fun Navigation() {
     // 导航主机
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
-            MainScreen(
-                navController = navController,
-                mainViewModel = MainViewModel()
-            )
+            MainScreen(navController = navController)
         }
         composable(Screen.Menu.route) {
             MenuScreen(

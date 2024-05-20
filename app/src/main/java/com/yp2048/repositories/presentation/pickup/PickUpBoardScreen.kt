@@ -87,16 +87,20 @@ fun PickUpBoardScreen(
                                             .width(elementWidth.dp)
                                             .height(elementHeight.dp)
                                             .clickable {
-                                                if (k.positionType == "1") {
+                                                if (k.positionType == "1"
+                                                    || k.positionType == "2"
+                                                    || k.positionType == "3"
+                                                    || k.positionType == "4") {
+
                                                     navController.navigate("PickUpTool/${k.id}")
                                                 }
                                             }
                                             .background(
                                                 when (k.positionType) {
-                                                    "1" -> Color.Gray
-                                                    "2" -> Color.Cyan
-                                                    "3" -> Color.Magenta
-                                                    "4" -> Color.Yellow
+                                                    "1" -> Color.Gray    // 普通
+                                                    "2" -> Color.Cyan    // RFID
+                                                    "3" -> Color.Magenta // 钥匙
+                                                    "4" -> Color.Yellow  // 工器具
                                                     "5" -> Color(0xFFEFEFEF)
                                                     "6" -> Color.Red
                                                     else -> Color.LightGray
@@ -157,7 +161,7 @@ fun PickUpBoardScreen(
         CircleLoading()
     }
 
-    if (uiState.userMessage.isNotEmpty()) {
+    uiState.userMessage?.let {
         // Show toast
         Toast.makeText(
             context,

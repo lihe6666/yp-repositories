@@ -1,4 +1,6 @@
 package com.yp2048.repositories.data.local
 
-class ScanFaceLocalDataSource {
+import javax.inject.Inject
+
+class ScanFaceLocalDataSource @Inject constructor() {
 }

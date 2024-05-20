@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.yp2048.repositories.data.repository.ScanFaceRepository
 import com.yp2048.repositories.presentation.MainUiState
 import com.yp2048.repositories.presentation.TokenManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,9 +14,11 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
 
-class MainViewModel(
-    private val scanFaceRepository: ScanFaceRepository = ScanFaceRepository()
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repository: ScanFaceRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiState())
@@ -42,7 +45,7 @@ class MainViewModel(
         viewModelScope.launch {
             // api call
             try {
-                val response = scanFaceRepository.setFaceLogin(file)
+                val response = repository.setFaceLogin(file)
 
                 if (response.code == 200) {
                     TokenManager.setToken(response.data?.token)

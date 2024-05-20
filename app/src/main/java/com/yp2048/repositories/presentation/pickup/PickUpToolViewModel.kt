@@ -23,7 +23,7 @@ class PickUpToolViewModel(
 
     fun resetUserMessage() {
         _uiState.update {
-            it.copy(userMessage = "")
+            it.copy(userMessage = null)
         }
     }
 
