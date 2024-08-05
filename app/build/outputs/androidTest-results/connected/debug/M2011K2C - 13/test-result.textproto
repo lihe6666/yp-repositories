@@ -1,0 +1,73 @@
+# 2024-05-20T02:13:00.766855Z:
+test_suite_meta_data {
+  scheduled_test_case_count: 1
+}
+test_status: FAILED
+test_result {
+  test_case {
+    test_class: "MainScreenInstrumentedTest"
+    test_package: "com.yp2048.repositories"
+    test_method: "test_MainScreen_takePicture_navigatesToMenu"
+    start_time {
+      seconds: 1716171178
+      nanos: 967000000
+    }
+    end_time {
+      seconds: 1716171180
+      nanos: 145000000
+    }
+  }
+  test_status: FAILED
+  error {
+    error_message: "java.lang.AssertionError: Assert failed: The component is not displayed!\nat androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)\nat com.yp2048.repositories.MainScreenInstrumentedTest.test_MainScreen_takePicture_navigatesToMenu(MainScreenInstrumentedTest.kt:47)\n"
+    error_type: "java.lang.AssertionError"
+    stack_trace: "java.lang.AssertionError: Assert failed: The component is not displayed!\nat androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)\nat com.yp2048.repositories.MainScreenInstrumentedTest.test_MainScreen_takePicture_navigatesToMenu(MainScreenInstrumentedTest.kt:47)\n"
+  }
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/Users/developer/Projects/repositories/app/build/outputs/androidTest-results/connected/debug/M2011K2C - 13/logcat-com.yp2048.repositories.MainScreenInstrumentedTest-test_MainScreen_takePicture_navigatesToMenu.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/Users/developer/Projects/repositories/app/build/outputs/androidTest-results/connected/debug/M2011K2C - 13/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/Users/developer/Projects/repositories/app/build/outputs/androidTest-results/connected/debug/M2011K2C - 13/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/Users/developer/Projects/repositories/app/build/outputs/androidTest-results/connected/debug/M2011K2C - 13/cpuinfo"
+    }
+  }
+}
+output_artifact {
+  label {
+    label: "test-results.log"
+    namespace: "com.google.testing.platform.runtime.android.driver.AndroidInstrumentationDriver"
+  }
+  source_path {
+    path: "/Users/developer/Projects/repositories/app/build/outputs/androidTest-results/connected/debug/M2011K2C - 13/testlog/test-results.log"
+  }
+  type: TEST_DATA
+  mime_type: "text/plain"
+}

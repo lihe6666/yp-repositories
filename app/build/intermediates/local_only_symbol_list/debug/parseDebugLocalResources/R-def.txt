@@ -1,0 +1,32 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable bg
+drawable flip_camera
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable photo_camera
+drawable videocam
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string apply
+string cancel
+string go_back_login
+string go_to_homepage
+string hand_back_item
+string into_storage_room
+string open_the_door
+string pick_up_item
+string quit
+string scan_face
+style Theme.Repositories
+xml backup_rules
+xml data_extraction_rules
+xml network_security_config

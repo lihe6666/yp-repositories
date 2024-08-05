@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="app_name">无人值守仓</string>
+    <string name="apply">确认</string>
+    <string name="cancel">取消</string>
+    <string name="go_back_login">返回</string>
+    <string name="go_to_homepage">返回首页</string>
+    <string name="hand_back_item">归还物品</string>
+    <string name="into_storage_room">进入库房</string>
+    <string name="open_the_door">"门已开，欢迎进入库房！"</string>
+    <string name="pick_up_item">领取物品</string>
+    <string name="quit">退出</string>
+    <string name="scan_face">请刷脸</string>
+    <style name="Theme.Repositories" parent="android:Theme.Material.Light.NoActionBar"/>
+</resources>
